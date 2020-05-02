@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     x = np.random.uniform(0, 255, (1, IMAGE_HEIGHT, IMAGE_WIDTH, 3)) - 128.
 
-    for i in range(3):
+    for i in range(1):
         x, loss, info = fmin_l_bfgs_b(evaluator.loss, x.flatten(), fprime=evaluator.gradients, maxfun=20)
         print("Iteration %d completed with loss %d" % (i, loss))
 
