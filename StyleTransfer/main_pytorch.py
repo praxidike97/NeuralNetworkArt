@@ -113,5 +113,5 @@ for i in tqdm(range(epochs)):
     # Displaying target image at checkpoints
     if (i + 1) % checkpoint == 0:
         print('Total loss: ', total_loss.item())
-        plt.imshow(image_combined.numpy()[0].transpose((1, 2, 0))* np.array((0.229, 0.224, 0.225)) + np.array((0.485, 0.456, 0.406)))
+        plt.imshow(image_combined.to("cpu").clone().detach().squeeze().numpy()[0].transpose((1, 2, 0))* np.array((0.229, 0.224, 0.225)) + np.array((0.485, 0.456, 0.406)))
         plt.show()
