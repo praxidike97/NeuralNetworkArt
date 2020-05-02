@@ -58,7 +58,7 @@ def get_feature_output(image, model, layers=None):
 
 
 image_content = load_image("./content_image.png")
-image_style = load_image("./style_image.png")
+image_style = load_image("./style_image02.jpeg")
 
 #plt.imshow(image.numpy()[0].transpose((1, 2, 0)))
 #plt.show()
@@ -113,5 +113,13 @@ for i in tqdm(range(epochs)):
     # Displaying target image at checkpoints
     if (i + 1) % checkpoint == 0:
         print('Total loss: ', total_loss.item())
-        plt.imshow(image_combined.to("cpu").clone().detach().squeeze().numpy()[0].transpose((1, 2, 0))* np.array((0.229, 0.224, 0.225)) + np.array((0.485, 0.456, 0.406)))
-        plt.show()
+        print(image_combined.to("cpu").clone().detach().squeeze().numpy().shape)
+        numpy_image = image_combined.to("cpu").clone().detach().squeeze().numpy().transpose((1, 2, 0))* np.array((0.229, 0.224, 0.225)) + np.array((0.485, 0.456, 0.406))
+        numpy_image = numpy_image.clip(0, 1)
+        #plt.imshow(numpy_image)
+        print(numpy_image.shape)
+        #output_image = Image.fromarray(numpy_image)
+        #output_image = Image.fromarray(np.uint8(numpy_image * 255))
+        #output_image.save("./output-{}.png".format(str(i+1).zfill(3)))
+        plt.imsave("./output-{}.png".format(str(i+1).zfill(3)), numpy_image)
+        #plt.show()
