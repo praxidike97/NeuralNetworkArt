@@ -163,3 +163,4 @@ if __name__ == '__main__':
 
     for epoch in range(args.epochs):
         train(vae, epoch, mnist_train_data_loader)
+        
