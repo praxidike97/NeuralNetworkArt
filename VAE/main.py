@@ -184,6 +184,7 @@ if __name__ == '__main__':
 
     print(type(mnist_train_data_loader))
 
-    #for epoch in range(args.epochs):
-    #    train(vae, epoch, mnist_train_data_loader)
+    for epoch in range(args.epochs):
+        train(vae, epoch, mnist_train_data_loader)
 
+    torch.save(vae.state_dict(), './output/model_weights.pth')
