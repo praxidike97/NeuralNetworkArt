@@ -5,6 +5,8 @@ import torchvision.datasets as datasets
 from torchvision import transforms
 from torchsummary import summary
 
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import argparse
 
 
@@ -117,6 +119,26 @@ class VAE(nn.Module):
         #print(result.size())
         return result, mean, log_var
 
+    def sample(self, num_samples):
+        z = torch.randn(num_samples, self.num_latent_dimensions)
+
+        samples = self.decode(z)
+        return samples
+
+
+def log_output(model, num_epoch):
+    num_samples = 5
+    samples = model.sample(num_samples=num_samples ** 2)
+    samples = samples.detach().numpy()
+
+    fig = plt.figure(constrained_layout=True)
+    spec = gridspec.GridSpec(ncols=num_samples, nrows=num_samples, figure=fig)
+    for i in range(num_samples):
+        for j in range(num_samples):
+            sub_fig = fig.add_subplot(spec[i, j])
+            sub_fig.imshow(samples[i * num_samples + j, 0, :, :], cmap='gray')
+    plt.savefig("./output/generated_numbers_epoch_{}.png".format(num_epoch))
+
 
 def vae_loss(predictions, labels, mean, log_var):
     reconstruction_loss = F.mse_loss(predictions, labels)
@@ -143,6 +165,7 @@ def train(model, epoch, data_loader):
         optimizer.step()
 
     print("Epoch {}, Loss: {}".format(epoch, train_loss))
+    log_output(model, epoch)
 
 
 if __name__ == '__main__':
@@ -161,6 +184,6 @@ if __name__ == '__main__':
 
     print(type(mnist_train_data_loader))
 
-    for epoch in range(args.epochs):
-        train(vae, epoch, mnist_train_data_loader)
-        
+    #for epoch in range(args.epochs):
+    #    train(vae, epoch, mnist_train_data_loader)
+
